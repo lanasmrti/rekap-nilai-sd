@@ -147,7 +147,14 @@ function DashboardLayout({ session }) {
           boxShadow: "0 2px 5px rgba(0,0,0,0.05)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+        <div
+          style={{
+            display: "flex",
+            gap: "10px",
+            marginBottom: "25px",
+            flexWrap: "wrap",
+          }}
+        >
           <span style={{ fontSize: "24px" }}>🏫</span>
           <div>
             <h3 style={{ margin: 0, color: "#1e3c72" }}>
@@ -445,7 +452,7 @@ function AttendanceTab({ students }) {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "1fr 300px",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
         gap: "25px",
         alignItems: "start",
       }}
@@ -592,7 +599,6 @@ function AttendanceTab({ students }) {
           </div>
         )}
       </div>
-
       {/* KOLOM KANAN: RINGKASAN */}
       <div style={{ ...cardStyle, position: "sticky", top: "20px" }}>
         <h3 style={{ marginTop: 0, color: "#333" }}>📊 Status Hari Ini</h3>
@@ -795,7 +801,7 @@ function StudentsTab({ students, refresh, refreshGrades, grades }) {
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "1fr 1fr",
+        gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
         gap: "25px",
         alignItems: "start",
       }}
@@ -974,7 +980,6 @@ function StudentsTab({ students, refresh, refreshGrades, grades }) {
           </div>
         </form>
       </div>
-
       {/* BAGIAN KANAN: DAFTAR KARTU SISWA */}
       <div style={{ ...cardStyle, background: "#f8f9fa" }}>
         <div
@@ -1129,7 +1134,6 @@ function StudentsTab({ students, refresh, refreshGrades, grades }) {
           )}
         </div>
       </div>
-
       {showModal && activeStudent && (
         <StudentReportModal
           student={activeStudent}
@@ -1230,7 +1234,14 @@ function GradesTab({ students, grades, refresh }) {
     const urls = urlText.split(/[\s,]+/).filter((u) => u.length > 0);
 
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+          gap: "25px",
+          alignItems: "start",
+        }}
+      >
         {urls.map((url, i) => (
           <a
             key={i}
