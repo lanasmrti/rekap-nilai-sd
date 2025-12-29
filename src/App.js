@@ -1145,7 +1145,7 @@ function StudentsTab({ students, refresh, refreshGrades, grades }) {
   );
 }
 
-// --- KONTEN TAB 3: NILAI (SUPPORT MULTI-PORTOFOLIO) ---
+// --- KONTEN TAB 3: NILAI (VERSI MOBILE FRIENDLY & RAPI) ---
 function GradesTab({ students, grades, refresh }) {
   const [form, setForm] = useState({
     studentId: "",
@@ -1227,21 +1227,11 @@ function GradesTab({ students, grades, refresh }) {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  // HELPER: Fungsi untuk memecah teks menjadi banyak link
   function renderMultiLinks(urlText) {
     if (!urlText) return null;
-    // Pisahkan berdasarkan koma (,) atau spasi atau baris baru
     const urls = urlText.split(/[\s,]+/).filter((u) => u.length > 0);
-
     return (
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "25px",
-          alignItems: "start",
-        }}
-      >
+      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
         {urls.map((url, i) => (
           <a
             key={i}
@@ -1272,15 +1262,16 @@ function GradesTab({ students, grades, refresh }) {
   );
 
   return (
+    // UBAH 1: Grid minmax jadi 250px agar muat di HP kecil
     <div
       style={{
         display: "grid",
-        gridTemplateColumns: "1fr 2fr",
+        gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
         gap: "25px",
         alignItems: "start",
       }}
     >
-      {/* FORM INPUT */}
+      {/* FORM INPUT (Posisi KIRI di Laptop / ATAS di HP) */}
       <div
         style={{
           ...cardStyle,
@@ -1349,17 +1340,14 @@ function GradesTab({ students, grades, refresh }) {
             <option>Cakap</option>
             <option>Perlu Bimbingan</option>
           </select>
-
-          {/* UBAH INPUT URL JADI TEXTAREA AGAR BISA PASTE BANYAK LINK */}
           <div>
             <textarea
-              placeholder="🔗 Link Portofolio (Pisahkan dengan koma atau spasi jika > 1)"
+              placeholder="🔗 Link Portofolio (Pisahkan koma/spasi)"
               value={form.url}
               onChange={(e) => setForm({ ...form, url: e.target.value })}
               style={{ ...inputStyle, minHeight: "60px", fontSize: "12px" }}
             />
           </div>
-
           <textarea
             placeholder="Refleksi..."
             value={form.reflection}
@@ -1386,8 +1374,10 @@ function GradesTab({ students, grades, refresh }) {
         </form>
       </div>
 
-      {/* TABEL DATA */}
-      <div style={cardStyle}>
+      {/* TABEL DATA (Posisi KANAN di Laptop / BAWAH di HP) */}
+      <div style={{ ...cardStyle, maxWidth: "100%", overflow: "hidden" }}>
+        {" "}
+        {/* Pastikan Card tidak melebar */}
         <div
           style={{
             display: "flex",
@@ -1399,7 +1389,7 @@ function GradesTab({ students, grades, refresh }) {
         >
           <select
             onChange={(e) => setFilter({ ...filter, sem: e.target.value })}
-            style={inputStyle}
+            style={{ ...inputStyle, minWidth: "150px" }}
           >
             <option value="Semua">Semua Semester</option>
             {semOpts.map((o) => (
@@ -1412,15 +1402,18 @@ function GradesTab({ students, grades, refresh }) {
             🖨️ PDF
           </button>
         </div>
-
-        <div style={{ overflowX: "auto" }}>
+        {/* UBAH 2: Overflow Auto untuk Scroll Horizontal */}
+        <div style={{ overflowX: "auto", paddingBottom: "5px" }}>
           <table
             style={{
               width: "100%",
               borderCollapse: "collapse",
               fontSize: "14px",
+              minWidth: "600px",
             }}
           >
+            {" "}
+            {/* MinWidth memaksa tabel tetap lebar & muncul scroll */}
             <thead>
               <tr
                 style={{
@@ -1429,11 +1422,13 @@ function GradesTab({ students, grades, refresh }) {
                   color: "#666",
                 }}
               >
-                <th style={{ padding: "10px" }}>Siswa</th>
-                <th style={{ padding: "10px" }}>Mapel</th>
-                <th style={{ padding: "10px" }}>Nilai</th>
-                <th style={{ padding: "10px" }}>Portofolio</th>
-                <th style={{ padding: "10px" }}>Aksi</th>
+                <th style={{ padding: "10px", whiteSpace: "nowrap" }}>Siswa</th>
+                <th style={{ padding: "10px", whiteSpace: "nowrap" }}>Mapel</th>
+                <th style={{ padding: "10px", whiteSpace: "nowrap" }}>Nilai</th>
+                <th style={{ padding: "10px", whiteSpace: "nowrap" }}>
+                  Portofolio
+                </th>
+                <th style={{ padding: "10px", whiteSpace: "nowrap" }}>Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -1446,24 +1441,29 @@ function GradesTab({ students, grades, refresh }) {
                   }}
                 >
                   <td style={{ padding: "10px" }}>
-                    <strong>{g.students?.name}</strong>
-                    <br />
-                    <small style={{ color: "#888" }}>{g.semester}</small>
+                    <div style={{ fontWeight: "bold", whiteSpace: "nowrap" }}>
+                      {g.students?.name}
+                    </div>
+                    <small style={{ color: "#888", whiteSpace: "nowrap" }}>
+                      {g.semester}
+                    </small>
                   </td>
-                  <td style={{ padding: "10px" }}>{g.subject}</td>
-                  <td style={{ padding: "10px" }}>
+                  <td style={{ padding: "10px", whiteSpace: "nowrap" }}>
+                    {g.subject}
+                  </td>
+                  <td style={{ padding: "10px", minWidth: "100px" }}>
                     <div style={{ fontWeight: "bold" }}>{g.score}</div>
                     <div
                       style={{
                         fontSize: "11px",
                         color: g.rubric === "Perlu Bimbingan" ? "red" : "green",
+                        whiteSpace: "nowrap",
                       }}
                     >
                       {g.rubric}
                     </div>
                   </td>
-                  <td style={{ padding: "10px", verticalAlign: "top" }}>
-                    {/* TAMPILKAN BANYAK LINK */}
+                  <td style={{ padding: "10px", minWidth: "120px" }}>
                     {renderMultiLinks(g.portfolio_url)}
                   </td>
                   <td style={{ padding: "10px" }}>
